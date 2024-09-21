@@ -79,4 +79,16 @@ public class Cart {
         
         selectedProducts.clear();
     }
+
+    public void removeProduct(long productIdToRemove) {
+        // todo: valida que exista el producto. limpiarlo más adelante
+        ProductInCart productInCartToRemove = selectedProducts.stream()
+                .filter(productInCart -> productInCart.getProduct().getId() == productIdToRemove)
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("El producto indicado no está en el carrito del usuario"));
+        
+        productInCartToRemove.restoreProductStock();  // todo: no deberia estar tocando stock acá ya que es solo carrito y no checkout
+        
+        selectedProducts.remove(productInCartToRemove);
+    }
 }

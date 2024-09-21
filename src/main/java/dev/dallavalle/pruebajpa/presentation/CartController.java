@@ -24,18 +24,31 @@ public class CartController {
         User requestingUser = new User();
         requestingUser.setId(1);
         
-        cartService.addProductToCart(cartRequestDto, requestingUser);
+        cartService.addProductToCart(cartRequestDto, requestingUser);  // todo: OJO, NO DEBERIA SACAR STOCK POR PONER EN CARRITO, SINO SOLO VALIDAR QUE ESTE EL STOCK Y RECIEN EN CHECKOUT SACARLO DE STOCK 
         return new CartResponseDto("Producto agregado");
     }
     
     @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
     public CartResponseDto clearUserCart() {
+        // todo: volar esto cuando se agregue spring security
         User requestingUser = new User();
         requestingUser.setId(1);
         
         cartService.clearUserCart(requestingUser);
         
         return new CartResponseDto("Carrito vaciado");
+    }
+    
+    @DeleteMapping(path = "/products/{productIdToRemove}")
+    @ResponseStatus(HttpStatus.OK)
+    public CartResponseDto removeProductFromUserCart(@PathVariable long productIdToRemove) {
+        // todo: volar esto cuando se agregue spring security
+        User requestingUser = new User();
+        requestingUser.setId(1);
+        
+        cartService.removeProductFromUserCart(productIdToRemove, requestingUser);
+        
+        return new CartResponseDto("Producto removido");
     }
 }

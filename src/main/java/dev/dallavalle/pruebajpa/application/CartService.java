@@ -45,4 +45,12 @@ public class CartService {
         
         cartRepository.save(userCart);
     }
+
+    public void removeProductFromUserCart(long productIdToRemove, User requestingUser) {
+        Cart userCart = cartRepository.findById(requestingUser.getId()).orElseThrow(EntityNotFoundException::new);
+        
+        userCart.removeProduct(productIdToRemove);
+        
+        cartRepository.save(userCart);
+    }
 }

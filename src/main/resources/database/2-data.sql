@@ -8,4 +8,5 @@ VALUES ('Zapatillas Adidas', 9, 5055.98),
 ('Short Nike', 7, 3033.76);
 
 INSERT INTO product_in_cart (product_id, cart_id, quantity) 
-VALUES (3, 1, 9);
+VALUES (1, 1, 9),
+(2, 1, 4);
