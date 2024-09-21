@@ -53,4 +53,12 @@ public class CartService {
         
         cartRepository.save(userCart);
     }
+
+    public void checkoutUserCart(User requestingUser) {
+        Cart userCart = cartRepository.findById(requestingUser.getId()).orElseThrow(EntityNotFoundException::new);
+        
+        userCart.checkout();
+        
+        cartRepository.save(userCart);
+    }
 }

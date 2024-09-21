@@ -32,4 +32,8 @@ public class ProductInCart {
     public void restoreProductStock() {
         product.restoreStock(quantity);
     }
+    
+    public void checkout() {
+        product.subtractStock(quantity);
+    }
 }

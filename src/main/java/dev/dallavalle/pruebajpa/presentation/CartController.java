@@ -51,4 +51,16 @@ public class CartController {
         
         return new CartResponseDto("Producto removido");
     }
+    
+    @PostMapping(path = "/checkout")
+    @ResponseStatus(HttpStatus.OK)
+    public CartResponseDto checkoutUserCart() {
+        // todo: volar esto cuando se agregue spring security
+        User requestingUser = new User();
+        requestingUser.setId(1);
+        
+        cartService.checkoutUserCart(requestingUser);
+        
+        return new CartResponseDto("Carrito comprado");
+    }
 }

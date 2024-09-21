@@ -38,7 +38,7 @@ public class Cart {
                 .orElseThrow(IllegalStateException::new);
         
         productInCart.addUnits(unitsRequested);
-        productToAdd.subtractUnits(unitsRequested);
+        productToAdd.subtractStock(unitsRequested);
     }
     
     private void validateProductStockMeetsUnitsRequested(Product product, long unitsRequested) {
@@ -60,7 +60,7 @@ public class Cart {
         
         selectedProducts.add(newProduct);
         
-        productToAdd.subtractUnits(unitsRequested);
+        productToAdd.subtractStock(unitsRequested);
         // todo: me falta restar los productos
         // todo: ojo, tambien buscar para que era el uso de @transactional y analizar donde tendría que aplicarlo
         // todo: tener en cuenta tema concurrencia? dejarlo para el final mepa
@@ -90,5 +90,10 @@ public class Cart {
         productInCartToRemove.restoreProductStock();  // todo: no deberia estar tocando stock acá ya que es solo carrito y no checkout
         
         selectedProducts.remove(productInCartToRemove);
+    }
+
+    public void checkout() {
+        selectedProducts.forEach(ProductInCart::checkout);
+        selectedProducts.clear();
     }
 }

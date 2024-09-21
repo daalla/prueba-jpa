@@ -21,12 +21,12 @@ public class Product {
     private long stock;
     private double price;
 
-    public void subtractUnits(long unitsRequested) {
-        if (unitsRequested > stock) {
-            throw new IllegalArgumentException("Hay menos stock del que se puede restar");
+    public void subtractStock(long stockRequested) {
+        if (stockRequested > stock) {
+            throw new IllegalArgumentException("Hay menos stock del que se solicita");
         }
         
-        stock -= unitsRequested;
+        stock -= stockRequested;
     }
 
     public void restoreStock(long quantity) {
