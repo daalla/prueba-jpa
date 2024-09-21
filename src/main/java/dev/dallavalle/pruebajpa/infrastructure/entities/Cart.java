@@ -1,5 +1,7 @@
 package dev.dallavalle.pruebajpa.infrastructure.entities;
 
+import dev.dallavalle.pruebajpa.presentation.CartDetailDto;
+import dev.dallavalle.pruebajpa.presentation.ProductInCartDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -95,5 +97,17 @@ public class Cart {
     public void checkout() {
         selectedProducts.forEach(ProductInCart::checkout);
         selectedProducts.clear();
+    }
+
+    public CartDetailDto toDto() {
+        List<ProductInCartDto> productInCartDtos = selectedProducts.stream().map(ProductInCart::toDto).toList();
+        double cartPriceForDto = productInCartDtos.stream()
+                .map(product -> product.getQuantity() * product.getPricePerUnit())
+                .reduce(0d, Double::sum);
+        
+        return CartDetailDto.builder()
+                .productsInCart(productInCartDtos)
+                .cartPrice(cartPriceForDto)
+                .build();
     }
 }

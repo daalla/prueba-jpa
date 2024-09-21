@@ -61,4 +61,8 @@ public class CartService {
         
         cartRepository.save(userCart);
     }
+
+    public Cart getUserCart(User requestingUser) {
+        return cartRepository.findById(requestingUser.getId()).orElseThrow(EntityNotFoundException::new);
+    }
 }

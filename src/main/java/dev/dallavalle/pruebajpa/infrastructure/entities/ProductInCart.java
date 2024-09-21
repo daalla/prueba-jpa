@@ -1,5 +1,6 @@
 package dev.dallavalle.pruebajpa.infrastructure.entities;
 
+import dev.dallavalle.pruebajpa.presentation.ProductInCartDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,5 +36,14 @@ public class ProductInCart {
     
     public void checkout() {
         product.subtractStock(quantity);
+    }
+    
+    public ProductInCartDto toDto() {
+        return ProductInCartDto.builder()
+                .productId(product.getId())
+                .name(product.getName())
+                .quantity(quantity)
+                .pricePerUnit(product.getPrice())
+                .build();
     }
 }

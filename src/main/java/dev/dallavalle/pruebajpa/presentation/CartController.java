@@ -1,6 +1,7 @@
 package dev.dallavalle.pruebajpa.presentation;
 
 import dev.dallavalle.pruebajpa.application.CartService;
+import dev.dallavalle.pruebajpa.infrastructure.entities.Cart;
 import dev.dallavalle.pruebajpa.infrastructure.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -62,5 +63,17 @@ public class CartController {
         cartService.checkoutUserCart(requestingUser);
         
         return new CartResponseDto("Carrito comprado");
+    }
+    
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public CartDetailDto getCartDetail() {
+        // todo: volar esto cuando se agregue spring security
+        User requestingUser = new User();
+        requestingUser.setId(1);
+        
+        Cart userCart = cartService.getUserCart(requestingUser);
+        
+        return userCart.toDto();
     }
 }
