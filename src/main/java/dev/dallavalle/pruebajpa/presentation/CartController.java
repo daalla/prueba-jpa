@@ -1,8 +1,11 @@
 package dev.dallavalle.pruebajpa.presentation;
 
 import dev.dallavalle.pruebajpa.application.CartService;
-import dev.dallavalle.pruebajpa.infrastructure.entities.Cart;
-import dev.dallavalle.pruebajpa.infrastructure.entities.User;
+import dev.dallavalle.pruebajpa.domain.entities.Cart;
+import dev.dallavalle.pruebajpa.domain.entities.User;
+import dev.dallavalle.pruebajpa.presentation.dtos.CartDetailDto;
+import dev.dallavalle.pruebajpa.presentation.dtos.CartRequestDto;
+import dev.dallavalle.pruebajpa.presentation.dtos.CartResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

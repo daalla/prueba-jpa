@@ -1,4 +1,4 @@
-package dev.dallavalle.pruebajpa.infrastructure.entities;
+package dev.dallavalle.pruebajpa.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;

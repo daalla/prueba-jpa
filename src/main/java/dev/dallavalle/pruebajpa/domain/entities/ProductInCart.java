@@ -1,6 +1,6 @@
-package dev.dallavalle.pruebajpa.infrastructure.entities;
+package dev.dallavalle.pruebajpa.domain.entities;
 
-import dev.dallavalle.pruebajpa.presentation.ProductInCartDto;
+import dev.dallavalle.pruebajpa.presentation.dtos.ProductInCartDto;
 import jakarta.persistence.*;
 import lombok.*;
 

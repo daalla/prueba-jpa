@@ -1,12 +1,14 @@
 package dev.dallavalle.pruebajpa.application;
 
-import dev.dallavalle.pruebajpa.infrastructure.entities.Cart;
-import dev.dallavalle.pruebajpa.infrastructure.entities.Product;
-import dev.dallavalle.pruebajpa.infrastructure.entities.User;
-import dev.dallavalle.pruebajpa.infrastructure.repositories.CartRepository;
-import dev.dallavalle.pruebajpa.infrastructure.repositories.ProductRepository;
-import dev.dallavalle.pruebajpa.presentation.CartRequestDto;
+import dev.dallavalle.pruebajpa.domain.entities.Cart;
+import dev.dallavalle.pruebajpa.domain.entities.Product;
+import dev.dallavalle.pruebajpa.domain.entities.User;
+import dev.dallavalle.pruebajpa.domain.repositories.CartRepository;
+import dev.dallavalle.pruebajpa.domain.repositories.ProductRepository;
+import dev.dallavalle.pruebajpa.presentation.dtos.CartRequestDto;
 import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service

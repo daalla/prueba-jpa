@@ -1,4 +1,4 @@
-package dev.dallavalle.pruebajpa.presentation;
+package dev.dallavalle.pruebajpa.presentation.dtos;
 
 import lombok.Value;
 
