@@ -13,7 +13,7 @@ public class ProductInCart {
     @EmbeddedId
     private ProductInCartId id;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @MapsId(value = "productId")
     @JoinColumn(name = "product_id")
     private Product product;
@@ -27,5 +27,9 @@ public class ProductInCart {
 
     public void addUnits(long unitsRequested) {
         quantity += unitsRequested;
+    }
+
+    public void restoreProductStock() {
+        product.restoreStock(quantity);
     }
 }

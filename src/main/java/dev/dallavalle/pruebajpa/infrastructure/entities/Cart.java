@@ -21,7 +21,7 @@ public class Cart {
     @JoinColumn(name = "owner_id")
     private User user;
     
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)  // todo: averiguar qué hace el orphanRemoval en Baeldung
     private List<ProductInCart> selectedProducts;
 
     public boolean hasProduct(Product productToAdd) {
@@ -70,5 +70,13 @@ public class Cart {
         if (hasProduct(productToAdd)) {
             throw new IllegalStateException("El producto ya existe");
         }
+    }
+
+    public void clear() {
+        for (ProductInCart productInCart : selectedProducts) {
+            productInCart.restoreProductStock();
+        }
+        
+        selectedProducts.clear();
     }
 }

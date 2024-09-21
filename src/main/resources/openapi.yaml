@@ -1,0 +1,338 @@
+# Links que pueden llegar a ser útiles:
+# - Tutorial breve sobre cómo confeccionar OpenAPI specs: https://support.smartbear.com/swaggerhub/docs/en/get-started/openapi-3-0-tutorial.html
+# - Guía más extensa sobre OpenAPI: https://swagger.io/docs/specification/about/
+# - Mejores prácticas sobre OpenAPI: https://learn.openapis.org/best-practices.html
+# - Mejores prácticas sobre REST: https://www.restapitutorial.com/
+# - Guía de estilo sobre REST: https://opensource.zalando.com/restful-api-guidelines/
+
+openapi: 3.1.0
+
+info:
+  title: ecommerce-api-backend-grupo-6
+  contact:
+    email: grupo6@uade.edu.ar
+  description: Backend del TP de Aplicaciones Interactivas (2do cuatrimestre de 2024).
+  version: 0.1.0
+
+servers:
+  - url: http://localhost:8080  # Actualizar o agregar nueva entrada si se despliega en un entorno público
+  
+tags:
+  - name: Gestión de usuarios
+    description: Acceso a la plataforma
+  - name: Catálogo de productos
+    description: Consulta de productos disponibles
+  - name: Carrito de compras
+    description: Carrito de compras de los clientes
+  - name: Gestión de productos
+    description: Administración de productos por parte de administradores
+  - name: Perfil de usuario
+    description: Gestión de la información del perfil del usuario
+
+security:
+  - JwtAuth: []
+
+paths:
+  /register:
+    post:
+      tags:
+        - Gestión de usuarios
+      summary: Registrar un nuevo usuario
+      description: Registra un usuario con la información proporcionada
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                birthDate:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+      operationId: registerUser
+      responses:
+        "201":
+          description: Usuario registrado exitosamente
+        "400":
+          description: Petición inválida
+
+  /login:
+    post:
+      tags:
+        - Gestión de usuarios
+      security: []
+      summary: Autentificación de usuario
+      description: Autentifica al usuario y retorna un token JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      operationId: loginUser
+      responses:
+        "200":
+          description: Usuario autenticado exitosamente
+        "401":
+          description: Credenciales inválidas
+
+  /products:
+    get:
+      tags:
+        - Catálogo de productos
+      summary: Listar productos
+      description: Obtiene una lista de productos destacados, por categoría o vistos recientemente
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: recentlyViewed
+          in: query
+          schema:
+            type: boolean
+      operationId: listProducts
+      responses:
+        "200":
+          description: Lista de productos obtenida exitosamente
+
+  /products/{productId}:
+    get:
+      tags:
+        - Catálogo de productos
+      summary: Obtener detalle de un producto
+      description: Obtiene el detalle de un producto, incluyendo descripción, stock, precio, y más
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      operationId: getProductDetail
+      responses:
+        "200":
+          description: Detalle del producto obtenido exitosamente
+        "404":
+          description: Producto no encontrado
+
+  /cart:
+    get:
+      tags:
+        - Carrito de compras
+      summary: Obtener detalle del carrito
+      description: Obtiene el detalle del carrito, incluyendo el costo total de los productos
+      operationId: getCarrito
+      responses:
+        "200":
+          description: Detalle del carrito enviado de forma exitosa
+        "401":
+          $ref: "#/components/responses/AuthenticationError"
+    delete:
+      tags:
+        - Carrito de compras
+      summary: Vaciar carrito
+      description: Vacía el carrito de compras del usuario
+      operationId: deleteCarrito
+      responses:
+        "200":
+          description: Carrito vaciado de forma exitosa
+        "401":
+          $ref: "#/components/responses/AuthenticationError"
+
+  /cart/products:
+    post:
+      tags:
+        - Carrito de compras
+      summary: Agregar producto al carrito
+      description: Agrega un producto al carrito del usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+                quantity:
+                  type: integer
+      operationId: addProductoCarrito
+      responses:
+        "200":
+          description: Producto agregado de forma exitosa
+        "400":
+          description: Petición inválida
+        "401":
+          $ref: "#/components/responses/AuthenticationError"
+
+  /cart/products/{productId}:
+    delete:
+      tags:
+        - Carrito de compras
+      summary: Eliminar producto del carrito
+      description: Elimina un producto del carrito
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      operationId: deleteProductoCarrito
+      responses:
+        "200":
+          description: Producto eliminado del carrito de forma exitosa
+        "404":
+          description: Producto no encontrado
+        "401":
+          $ref: "#/components/responses/AuthenticationError"
+
+  /cart/checkout:
+    post:
+      tags:
+        - Carrito de compras
+      summary: Realizar checkout del carrito
+      description: Realiza el checkout del carrito, descontando el stock de los productos
+      operationId: checkoutCarrito
+      responses:
+        "200":
+          description: Checkout realizado de forma exitosa
+        "409":
+          description: Error al realizar el checkout debido a falta de stock
+        "401":
+          $ref: "#/components/responses/AuthenticationError"
+
+  /management/products:
+    post:
+      tags:
+        - Gestión de productos
+      summary: Crear un nuevo producto
+      description: Crea un nuevo producto con las fotos, descripción, categoría, y stock
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                category:
+                  type: string
+                stock:
+                  type: integer
+                price:
+                  type: number
+      operationId: createProduct
+      responses:
+        "201":
+          description: Producto creado exitosamente
+        "400":
+          description: Petición inválida
+
+  /management/products/{productId}:
+    put:
+      tags:
+        - Gestión de productos
+      summary: Actualizar un producto existente
+      description: Actualiza la información de un producto existente
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                category:
+                  type: string
+                stock:
+                  type: integer
+                price:
+                  type: number
+      operationId: updateProduct
+      responses:
+        "200":
+          description: Producto actualizado exitosamente
+        "404":
+          description: Producto no encontrado
+        "400":
+          description: Petición inválida
+
+    delete:
+      tags:
+        - Gestión de productos
+      summary: Eliminar un producto existente
+      description: Elimina un producto existente de la base de datos
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      operationId: deleteProduct
+      responses:
+        "200":
+          description: Producto eliminado exitosamente
+        "404":
+          description: Producto no encontrado
+
+  /profile:
+    get:
+      tags:
+        - Perfil de usuario
+      summary: Obtener perfil del usuario
+      description: Obtiene los datos del perfil del usuario autenticado
+      operationId: getUserProfile
+      responses:
+        "200":
+          description: Perfil obtenido de forma exitosa
+        "401":
+          $ref: "#/components/responses/AuthenticationError"
+
+  /profile/checkouts:
+    get:
+      tags:
+        - Perfil de usuario
+      summary: Obtener historial de compras
+      description: Obtiene el historial de checkouts realizados por el usuario
+      operationId: getUserCheckouts
+      responses:
+        "200":
+          description: Historial obtenido de forma exitosa
+        "401":
+          $ref: "#/components/responses/AuthenticationError"
+
+components:
+  securitySchemes:
+    JwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    AuthenticationError:
+      description: Petición no autenticada

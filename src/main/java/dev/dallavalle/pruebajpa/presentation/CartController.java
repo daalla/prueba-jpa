@@ -30,8 +30,12 @@ public class CartController {
     
     @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
-    public CartResponseDto emptyShoppingCart() {
+    public CartResponseDto clearUserCart() {
         User requestingUser = new User();
         requestingUser.setId(1);
+        
+        cartService.clearUserCart(requestingUser);
+        
+        return new CartResponseDto("Carrito vaciado");
     }
 }

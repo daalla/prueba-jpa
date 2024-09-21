@@ -19,6 +19,7 @@ public class CartService {
         this.cartRepository = cartRepository;
     }
 
+    // todo: no olvidarme de los @Transaction. ver donde tendria que agregarlos.
     public void addProductToCart(CartRequestDto cartRequestDto, User requestingUser) {
         long productId = cartRequestDto.getProductId();
         long userId = requestingUser.getId();
@@ -33,6 +34,14 @@ public class CartService {
         } else {
             userCart.addNewProduct(unitsRequested, productToAdd);
         }
+        
+        cartRepository.save(userCart);
+    }
+
+    public void clearUserCart(User requestingUser) {
+        Cart userCart = cartRepository.findById(requestingUser.getId()).orElseThrow(EntityNotFoundException::new);
+        
+        userCart.clear();
         
         cartRepository.save(userCart);
     }
