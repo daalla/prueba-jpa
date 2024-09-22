@@ -23,13 +23,9 @@ public class Product {
 
     public void subtractStock(long stockRequested) {
         if (stockRequested > stock) {
-            throw new IllegalArgumentException("Hay menos stock del que se solicita");
+            throw new IllegalArgumentException("Hay menos stock del que se requiere");
         }
         
         stock -= stockRequested;
-    }
-
-    public void restoreStock(long quantity) {
-        stock += quantity;
     }
 }

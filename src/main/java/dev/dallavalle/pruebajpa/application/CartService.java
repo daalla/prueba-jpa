@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CartService {
+    private static final Logger logger = LoggerFactory.getLogger(CartService.class);
     private final ProductRepository productRepository;
     private final CartRepository cartRepository;
 
@@ -26,11 +27,12 @@ public class CartService {
         long productId = cartRequestDto.getProductId();
         long userId = requestingUser.getId();
         long unitsRequested = cartRequestDto.getQuantity();
-        
-        Product productToAdd = productRepository.findById(productId).orElseThrow(EntityNotFoundException::new);
-        Cart userCart = cartRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
 
-        // todo: creo que esta lógica podría ir toda dentro de addProduct en la clase Cart
+        Product productToAdd = productRepository.findById(productId).orElseThrow(EntityNotFoundException::new);;
+//        Cart userCart = cartRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+        Cart userCart = cartRepository.findByUser(requestingUser).orElseThrow(EntityNotFoundException::new);
+
+        // todo: creo que esta lógica podría ir toda dentro de addProduct en la clase Cart, asi respeto mejor grasp/solid
         if (userCart.hasProduct(productToAdd)) {
             userCart.addMoreUnitsOfProduct(unitsRequested, productToAdd);
         } else {
@@ -56,11 +58,10 @@ public class CartService {
         cartRepository.save(userCart);
     }
 
-    public void checkoutUserCart(User requestingUser) {
+    public void checkOutUserCart(User requestingUser) {
         Cart userCart = cartRepository.findById(requestingUser.getId()).orElseThrow(EntityNotFoundException::new);
-        
-        userCart.checkout();
-        
+        logger.info("Carrito pagado");
+        userCart.checkOut();
         cartRepository.save(userCart);
     }
 

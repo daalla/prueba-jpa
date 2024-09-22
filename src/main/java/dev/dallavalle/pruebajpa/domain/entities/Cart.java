@@ -28,7 +28,7 @@ public class Cart {
 
     public boolean hasProduct(Product productToAdd) {
         return selectedProducts.stream()
-                .anyMatch(productInCart -> productInCart.getProduct().equals(productToAdd));
+                .anyMatch(productInCart -> productInCart.getProduct().equals(productToAdd));  // todo: ojo, probar si esto realmente funciona o necesita un equals con los atributos que no cambian (id solo probablemente?)
     }
 
     public void addMoreUnitsOfProduct(long unitsRequested, Product productToAdd) {
@@ -40,7 +40,6 @@ public class Cart {
                 .orElseThrow(IllegalStateException::new);
         
         productInCart.addUnits(unitsRequested);
-        productToAdd.subtractStock(unitsRequested);
     }
     
     private void validateProductStockMeetsUnitsRequested(Product product, long unitsRequested) {
@@ -62,8 +61,6 @@ public class Cart {
         
         selectedProducts.add(newProduct);
         
-        productToAdd.subtractStock(unitsRequested);
-        // todo: me falta restar los productos
         // todo: ojo, tambien buscar para que era el uso de @transactional y analizar donde tendría que aplicarlo
         // todo: tener en cuenta tema concurrencia? dejarlo para el final mepa
     }
@@ -75,10 +72,6 @@ public class Cart {
     }
 
     public void clear() {
-        for (ProductInCart productInCart : selectedProducts) {
-            productInCart.restoreProductStock();
-        }
-        
         selectedProducts.clear();
     }
 
@@ -89,13 +82,11 @@ public class Cart {
                 .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException("El producto indicado no está en el carrito del usuario"));
         
-        productInCartToRemove.restoreProductStock();  // todo: no deberia estar tocando stock acá ya que es solo carrito y no checkout
-        
         selectedProducts.remove(productInCartToRemove);
     }
 
-    public void checkout() {
-        selectedProducts.forEach(ProductInCart::checkout);
+    public void checkOut() {
+        selectedProducts.forEach(ProductInCart::checkOut);
         selectedProducts.clear();
     }
 

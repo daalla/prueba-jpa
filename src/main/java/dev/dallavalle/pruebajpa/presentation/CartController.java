@@ -28,7 +28,7 @@ public class CartController {
         User requestingUser = new User();
         requestingUser.setId(1);
         
-        cartService.addProductToCart(cartRequestDto, requestingUser);  // todo: OJO, NO DEBERIA SACAR STOCK POR PONER EN CARRITO, SINO SOLO VALIDAR QUE ESTE EL STOCK Y RECIEN EN CHECKOUT SACARLO DE STOCK 
+        cartService.addProductToCart(cartRequestDto, requestingUser); 
         return new CartResponseDto("Producto agregado");
     }
     
@@ -58,12 +58,12 @@ public class CartController {
     
     @PostMapping(path = "/checkout")
     @ResponseStatus(HttpStatus.OK)
-    public CartResponseDto checkoutUserCart() {
+    public CartResponseDto checkOutUserCart() {
         // todo: volar esto cuando se agregue spring security
         User requestingUser = new User();
         requestingUser.setId(1);
         
-        cartService.checkoutUserCart(requestingUser);
+        cartService.checkOutUserCart(requestingUser);
         
         return new CartResponseDto("Carrito comprado");
     }

@@ -15,7 +15,7 @@ info:
   version: 0.1.0
 
 servers:
-  - url: http://localhost:8080  # Actualizar o agregar nueva entrada si se despliega en un entorno público
+  - url: http://localhost:8081  # Actualizar o agregar nueva entrada si se despliega en un entorno público
   
 tags:
   - name: Gestión de usuarios

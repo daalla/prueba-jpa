@@ -30,14 +30,10 @@ public class ProductInCart {
         quantity += unitsRequested;
     }
 
-    public void restoreProductStock() {
-        product.restoreStock(quantity);
-    }
-    
-    public void checkout() {
+    public void checkOut() {
         product.subtractStock(quantity);
     }
-    
+
     public ProductInCartDto toDto() {
         return ProductInCartDto.builder()
                 .productId(product.getId())
